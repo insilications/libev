@@ -4,7 +4,7 @@
 #
 Name     : libev
 Version  : 4.24
-Release  : 1
+Release  : 2
 URL      : http://dist.schmorp.de/libev/libev-4.24.tar.gz
 Source0  : http://dist.schmorp.de/libev/libev-4.24.tar.gz
 Summary  : No detailed summary available
@@ -12,6 +12,14 @@ Group    : Development/Tools
 License  : BSD-2-Clause
 Requires: libev-lib
 Requires: libev-doc
+BuildRequires : automake
+BuildRequires : automake-dev
+BuildRequires : gettext-bin
+BuildRequires : libtool
+BuildRequires : libtool-dev
+BuildRequires : m4
+BuildRequires : pkg-config-dev
+Patch1: 0001-pkg-include-headers.diff
 
 %description
 libev is a high-performance event loop/event model with lots of features.
@@ -45,14 +53,15 @@ lib components for the libev package.
 
 %prep
 %setup -q -n libev-4.24
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1525192003
-%configure --disable-static
+export SOURCE_DATE_EPOCH=1525295313
+%reconfigure --disable-static
 make  %{?_smp_mflags}
 
 %check
@@ -63,7 +72,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1525192003
+export SOURCE_DATE_EPOCH=1525295313
 rm -rf %{buildroot}
 %make_install
 
@@ -72,7 +81,9 @@ rm -rf %{buildroot}
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
+/usr/include/libev/ev++.h
+/usr/include/libev/ev.h
+/usr/include/libev/event.h
 /usr/lib64/libev.so
 
 %files doc
