@@ -4,7 +4,7 @@
 #
 Name     : libev
 Version  : 4.25
-Release  : 4
+Release  : 5
 URL      : http://dist.schmorp.de/libev/libev-4.25.tar.gz
 Source0  : http://dist.schmorp.de/libev/libev-4.25.tar.gz
 Summary  : No detailed summary available
