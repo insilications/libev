@@ -4,7 +4,7 @@
 #
 Name     : libev
 Version  : 4.25
-Release  : 5
+Release  : 6
 URL      : http://dist.schmorp.de/libev/libev-4.25.tar.gz
 Source0  : http://dist.schmorp.de/libev/libev-4.25.tar.gz
 Summary  : No detailed summary available
@@ -30,6 +30,7 @@ Summary: dev components for the libev package.
 Group: Development
 Requires: libev-lib = %{version}-%{release}
 Provides: libev-devel = %{version}-%{release}
+Requires: libev = %{version}-%{release}
 
 %description dev
 dev components for the libev package.
@@ -54,29 +55,38 @@ license components for the libev package.
 
 %prep
 %setup -q -n libev-4.25
+cd %{_builddir}/libev-4.25
 %patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1545508190
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604352969
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %reconfigure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1545508190
+export SOURCE_DATE_EPOCH=1604352969
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libev
-cp LICENSE %{buildroot}/usr/share/package-licenses/libev/LICENSE
+cp %{_builddir}/libev-4.25/LICENSE %{buildroot}/usr/share/package-licenses/libev/10e633ee2e9f8a961554d0d579f03a1d0755ff3b
 %make_install
 
 %files
@@ -97,4 +107,4 @@ cp LICENSE %{buildroot}/usr/share/package-licenses/libev/LICENSE
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/libev/LICENSE
+/usr/share/package-licenses/libev/10e633ee2e9f8a961554d0d579f03a1d0755ff3b
