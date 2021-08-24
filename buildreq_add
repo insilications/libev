@@ -1,2 +1,9 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
+automake
+automake-dev
+gettext-bin
+libtool
+libtool-dev
+m4
+pkg-config-dev

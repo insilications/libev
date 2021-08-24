@@ -1,5 +1,6 @@
 PKG_NAME := libev
-URL = http://dist.schmorp.de/libev/libev-4.25.tar.gz
+URL = file:///aot/build/clearlinux/packages/libev/libev-4.33.tar.gz
 ARCHIVES = 
+ARCHIVES_GIT = 
 
 include ../common/Makefile.common

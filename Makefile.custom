@@ -1,0 +1,31 @@
+download-it:
+	-@if ! compgen -G "libev-*.tar.gz" > /dev/null; then \
+		OUTPUT="$(shell python get_url.py)"; \
+		if [ -z "$$OUTPUT" ]; then \
+			echo -e "Cant find version"; \
+			exit 1; \
+		fi; \
+		FILE_NAME=$$OUTPUT; \
+		DOWNLOADURL="http://cvs.schmorp.de/libev/?view=tar&pathrev=MAIN"; \
+		echo -e "\e[32m\xE2\x9C\x93 latest version is: \e[33m$$FILE_NAME\e[m"; \
+		echo -e "\e[32m\xE2\x9C\x93 download URL is: \e[33m$$DOWNLOADURL\e[m"; \
+		curl -L -C - --output "$$FILE_NAME" "$$DOWNLOADURL"; \
+		if compgen -G "libev-*.tar.gz" > /dev/null; then \
+			echo "file://$$PWD/$$FILE_NAME" > '/tmp/Makefile_custom.temp'; \
+		else \
+			echo -e "\e[31m\xe2\x9d\x8c Cannot download or find libev-<VERSION>.tar.gz under current directory\e[m"; \
+			exit 1; \
+		fi; \
+	fi;
+
+preautospec-checks: download-it
+	$(eval export NEWURL:=$(shell cat '/tmp/Makefile_custom.temp'))
+	-@rm /tmp/Makefile_custom.temp
+
+preautospecnew-checks: download-it
+	$(eval export NEWURL:=$(shell cat '/tmp/Makefile_custom.temp'))
+	-@rm /tmp/Makefile_custom.temp
+
+prebuild-checks: download-it
+	$(eval export NEWURL:=$(shell cat '/tmp/Makefile_custom.temp'))
+	-@rm /tmp/Makefile_custom.temp
